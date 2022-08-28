@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/johnfercher/maroto/pkg/color"
-	"github.com/johnfercher/maroto/pkg/consts"
-	"github.com/johnfercher/maroto/pkg/pdf"
-	"github.com/johnfercher/maroto/pkg/props"
+	"github.com/huriATlunar/maroto/pkg/color"
+	"github.com/huriATlunar/maroto/pkg/consts"
+	"github.com/huriATlunar/maroto/pkg/pdf"
+	"github.com/huriATlunar/maroto/pkg/props"
 )
 
 func main() {
@@ -46,14 +46,14 @@ func main() {
 			m.ColSpace(3)
 
 			m.Col(3, func() {
-				m.QrCode("https://github.com/johnfercher/maroto", props.Rect{
+				m.QrCode("https://github.com/huriATlunar/maroto", props.Rect{
 					Center:  true,
 					Percent: 75,
 				})
 			})
 
 			m.Col(3, func() {
-				id := "https://github.com/johnfercher/maroto"
+				id := "https://github.com/huriATlunar/maroto"
 				_ = m.Barcode(id, props.Barcode{
 					Center:     true,
 					Proportion: props.Proportion{Width: 50, Height: 10},
@@ -201,9 +201,11 @@ func main() {
 
 	m.TableList(headerMedium, mediumContent, props.TableList{
 		ContentProp: props.TableListContent{
-			Family:    consts.Courier,
-			Style:     consts.Italic,
-			GridSizes: []uint{5, 5, 2},
+			Family:       consts.Courier,
+			Style:        consts.Italic,
+			GridSizes:    []uint{5, 5, 2},
+			InnerBorders: false,
+			OuterBorder:  true,
 		},
 		HeaderProp: props.TableListContent{
 			GridSizes: []uint{5, 5, 2},

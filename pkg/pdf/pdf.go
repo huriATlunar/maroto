@@ -3,12 +3,12 @@ package pdf
 import (
 	"bytes"
 
-	"github.com/johnfercher/maroto/internal/fpdf"
-	"github.com/johnfercher/maroto/pkg/color"
+	"github.com/huriATlunar/maroto/internal/fpdf"
+	"github.com/huriATlunar/maroto/pkg/color"
 
-	"github.com/johnfercher/maroto/internal"
-	"github.com/johnfercher/maroto/pkg/consts"
-	"github.com/johnfercher/maroto/pkg/props"
+	"github.com/huriATlunar/maroto/internal"
+	"github.com/huriATlunar/maroto/pkg/consts"
+	"github.com/huriATlunar/maroto/pkg/props"
 	"github.com/jung-kurt/gofpdf"
 )
 
@@ -21,6 +21,7 @@ const (
 
 // Maroto is the principal abstraction to create a PDF document.
 type Maroto interface {
+	GetFpdf() fpdf.Fpdf
 	// Grid System
 	Row(height float64, closure func())
 	Col(width uint, closure func())
@@ -72,8 +73,8 @@ type Maroto interface {
 // PdfMaroto is the principal structure which implements Maroto abstraction.
 type PdfMaroto struct {
 	// Gofpdf wrapper.
+	//Pdf gofpdf.Fpdf
 	Pdf fpdf.Fpdf
-
 	// Components.
 	Math            internal.Math
 	Font            internal.Font
@@ -136,12 +137,12 @@ func NewMarotoCustomSize(orientation consts.Orientation, pageSize consts.PageSiz
 
 	code := internal.NewCode(fpdf, math)
 
-	tableList := internal.NewTableList(text, font)
+	tableList := internal.NewTableList(fpdf, text, font)
 
 	lineHelper := internal.NewLine(fpdf)
 
 	maroto := &PdfMaroto{
-		Pdf:               fpdf,
+		//Pdf:               fpdf,
 		Math:              math,
 		Font:              font,
 		TextHelper:        text,
@@ -174,6 +175,11 @@ func NewMarotoCustomSize(orientation consts.Orientation, pageSize consts.PageSiz
 // Shorthand when using a preset page size from consts.PageSize.
 func NewMaroto(orientation consts.Orientation, pageSize consts.PageSize) Maroto {
 	return NewMarotoCustomSize(orientation, pageSize, "mm", 0, 0)
+}
+
+//Exposing the inner Pdf object
+func (s *PdfMaroto) GetFpdf() fpdf.Fpdf {
+	return s.Pdf
 }
 
 // AddPage adds a new page in the PDF.
@@ -271,7 +277,7 @@ func (s *PdfMaroto) Signature(label string, prop ...props.Font) {
 // Headers have bold style, and localized at the top of table.
 // Contents are array of arrays. Each array is one line.
 func (s *PdfMaroto) TableList(header []string, contents [][]string, prop ...props.TableList) {
-	s.TableListHelper.Create(header, contents, s.defaultFontFamily, prop...)
+	s.TableListHelper.Create(s.GetFpdf(), header, contents, s.defaultFontFamily, prop...)
 }
 
 // SetBorder enable the draw of lines in every cell.
@@ -326,6 +332,8 @@ func (s *PdfMaroto) Line(spaceHeight float64, prop ...props.Line) {
 	}
 	lineProp.MakeValid(spaceHeight)
 
+	lineHelper := internal.NewLine(s.Pdf)
+
 	s.Row(spaceHeight, func() {
 		s.Col(0, func() {
 			width, _ := s.Pdf.GetPageSize()
@@ -339,7 +347,7 @@ func (s *PdfMaroto) Line(spaceHeight float64, prop ...props.Line) {
 				Height: s.offsetY + top + (spaceHeight / divisorToGetHalf),
 			}
 
-			s.LineHelper.Draw(cell, lineProp)
+			lineHelper.Draw(cell, lineProp)
 		})
 	})
 }

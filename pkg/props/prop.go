@@ -1,8 +1,8 @@
 package props
 
 import (
-	"github.com/johnfercher/maroto/pkg/color"
-	"github.com/johnfercher/maroto/pkg/consts"
+	"github.com/huriATlunar/maroto/pkg/color"
+	"github.com/huriATlunar/maroto/pkg/consts"
 )
 
 // Proportion represents a proportion from a rectangle, example: 16x9, 4x3...
@@ -101,7 +101,9 @@ type TableListContent struct {
 	// the sum of the values cannot be greater than 12, if this
 	// value is not provided the width of all columns will be the
 	// same.
-	GridSizes []uint
+	GridSizes    []uint
+	OuterBorder  bool
+	InnerBorders bool
 }
 
 // TableList represents properties from a TableList.

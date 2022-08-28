@@ -1,9 +1,10 @@
 package internal
 
 import (
-	"github.com/johnfercher/maroto/pkg/color"
-	"github.com/johnfercher/maroto/pkg/consts"
-	"github.com/johnfercher/maroto/pkg/props"
+	"github.com/huriATlunar/maroto/internal/fpdf"
+	"github.com/huriATlunar/maroto/pkg/color"
+	"github.com/huriATlunar/maroto/pkg/consts"
+	"github.com/huriATlunar/maroto/pkg/props"
 )
 
 const (
@@ -30,21 +31,24 @@ type MarotoGridPart interface {
 	Text(text string, prop ...props.Text)
 }
 
-// TableList is the abstraction to create a table with header and contents.
+// TableList is the abstraction to create a table with header and contents. //  gofpdf.Fpdf
 type TableList interface {
-	Create(header []string, contents [][]string, defaultFontFamily string, prop ...props.TableList)
+	Create(fpdf fpdf.Fpdf, header []string, contents [][]string, defaultFontFamily string, prop ...props.TableList)
 	BindGrid(part MarotoGridPart)
 }
 
 type tableList struct {
+	//fpdf gofpdf.Fpdf
+	fpdf fpdf.Fpdf
 	pdf  MarotoGridPart
 	text Text
 	font Font
 }
 
-// NewTableList create a TableList.
-func NewTableList(text Text, font Font) *tableList {
+// NewTableList create a TableList. // saved for later: gofpdf.Fpdf
+func NewTableList(fPdf fpdf.Fpdf, text Text, font Font) *tableList {
 	return &tableList{
+		fpdf: fPdf,
 		text: text,
 		font: font,
 	}
@@ -57,7 +61,7 @@ func (s *tableList) BindGrid(pdf MarotoGridPart) {
 
 // Create method creates a header section with a list of strings and
 // create many rows with contents.
-func (s *tableList) Create(header []string, contents [][]string, defaultFontFamily string, prop ...props.TableList) {
+func (s *tableList) Create(Fpdf fpdf.Fpdf, header []string, contents [][]string, defaultFontFamily string, prop ...props.TableList) {
 	if len(header) == 0 {
 		return
 	}
@@ -87,6 +91,7 @@ func (s *tableList) Create(header []string, contents [][]string, defaultFontFami
 		}
 	})
 
+	lineHelper := NewLine(s.fpdf)
 	// Define space between header and contents.
 	s.pdf.Row(tableProp.HeaderContentSpace, func() {
 		s.pdf.ColSpace(0)
@@ -118,6 +123,22 @@ func (s *tableList) Create(header []string, contents [][]string, defaultFontFami
 		if tableProp.Line {
 			s.pdf.Line(lineHeight, tableProp.LineProp)
 		}
+
+		//		if tableProp.ContentProp.OuterBorder {
+
+		cell := Cell{
+			//X:      left,
+			X: 10,
+			//Y:      s.offsetY + top + (spaceHeight / divisorToGetHalf),
+			Y: 10,
+			//Width:  width - right,
+			Width: 10,
+			//Height: s.offsetY + top + (spaceHeight / divisorToGetHalf),
+			Height: 100,
+		}
+
+		lineHelper.Draw(cell, tableProp.LineProp)
+		//		}
 	}
 }
 
