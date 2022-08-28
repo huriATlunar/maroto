@@ -73,7 +73,6 @@ type Maroto interface {
 // PdfMaroto is the principal structure which implements Maroto abstraction.
 type PdfMaroto struct {
 	// Gofpdf wrapper.
-	//Pdf gofpdf.Fpdf
 	Pdf fpdf.Fpdf
 	// Components.
 	Math            internal.Math
@@ -142,7 +141,7 @@ func NewMarotoCustomSize(orientation consts.Orientation, pageSize consts.PageSiz
 	lineHelper := internal.NewLine(fpdf)
 
 	maroto := &PdfMaroto{
-		//Pdf:               fpdf,
+		Pdf:               fpdf,
 		Math:              math,
 		Font:              font,
 		TextHelper:        text,
