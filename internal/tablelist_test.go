@@ -15,7 +15,7 @@ import (
 
 func TestNewTableList(t *testing.T) {
 	// Act
-	tableList := internal.NewTableList(nil, nil)
+	tableList := internal.NewTableList(nil, nil, nil)
 
 	// Assert
 	assert.NotNil(t, tableList)
@@ -26,12 +26,12 @@ func TestTableList_Create_WhenHeaderIsNil(t *testing.T) {
 	// Arrange
 	text := &mocks.Text{}
 	text.On("GetLinesQuantity", mock.Anything, mock.Anything, mock.Anything).Return(1)
-	sut := internal.NewTableList(text, nil)
+	sut := internal.NewTableList(nil, text, nil)
 
 	_, contents := getContents()
 
 	// Act
-	sut.Create(nil, contents, consts.Arial)
+	sut.Create( contents, consts.Arial)
 
 	// Assert
 	text.AssertNotCalled(t, "GetLinesQuantity")
@@ -41,7 +41,7 @@ func TestTableList_Create_WhenHeaderIsEmpty(t *testing.T) {
 	// Arrange
 	text := &mocks.Text{}
 	text.On("GetLinesQuantity", mock.Anything, mock.Anything, mock.Anything).Return(1)
-	sut := internal.NewTableList(text, nil)
+	sut := internal.NewTableList(nil, text, nil)
 
 	_, contents := getContents()
 
@@ -56,12 +56,12 @@ func TestTableList_Create_WhenContentIsNil(t *testing.T) {
 	// Arrange
 	text := &mocks.Text{}
 	text.On("GetLinesQuantity", mock.Anything, mock.Anything, mock.Anything).Return(1)
-	sut := internal.NewTableList(text, nil)
+	sut := internal.NewTableList(nil, text, nil)
 
 	headers, _ := getContents()
 
 	// Act
-	sut.Create(headers, nil, consts.Arial)
+	sut.Create( headers, nil, consts.Arial)
 
 	// Assert
 	text.AssertNotCalled(t, "GetLinesQuantity")
@@ -71,12 +71,12 @@ func TestTableList_Create_WhenContentIsEmpty(t *testing.T) {
 	// Arrange
 	text := &mocks.Text{}
 	text.On("GetLinesQuantity", mock.Anything, mock.Anything, mock.Anything).Return(1)
-	sut := internal.NewTableList(text, nil)
+	sut := internal.NewTableList(nil, text, nil)
 
 	headers, _ := getContents()
 
 	// Act
-	sut.Create(headers, [][]string{}, consts.Arial)
+	sut.Create( headers, [][]string{}, consts.Arial)
 
 	// Assert
 	text.AssertNotCalled(t, "GetLinesQuantity")
@@ -104,7 +104,7 @@ func TestTableList_Create_Happy(t *testing.T) {
 	headers, contents := getContents()
 
 	// Act
-	sut.Create(headers, contents, consts.Arial, props.TableList{
+	sut.Create( headers, contents, consts.Arial, props.TableList{
 		Line: true,
 		LineProp: props.Line{
 			Style: consts.Dotted,
@@ -153,7 +153,7 @@ func TestTableList_Create_HappyWithBackgroundColor(t *testing.T) {
 	}
 
 	// Act
-	sut.Create(headers, contents, consts.Arial, props.TableList{
+	sut.Create( headers, contents, consts.Arial, props.TableList{
 		AlternatedBackground: &color,
 	})
 
@@ -194,7 +194,7 @@ func TestTableList_Create_Happy_Without_Line(t *testing.T) {
 	headers, contents := getContents()
 
 	// Act
-	sut.Create(headers, contents, consts.Arial)
+	sut.Create(, headers, contents, consts.Arial)
 
 	// Assert
 	text.AssertNotCalled(t, "GetLinesQuantity")
@@ -257,7 +257,7 @@ func TestTableList_Create_WhenContentIsEmptyWithLine(t *testing.T) {
 	headers, _ := getContents()
 
 	// Act
-	sut.Create(headers, [][]string{}, consts.Arial, props.TableList{
+	sut.Create( headers, [][]string{}, consts.Arial, props.TableList{
 		Line: true,
 	})
 
@@ -293,7 +293,7 @@ func TestTableList_Create_WithLineProp(t *testing.T) {
 	}
 
 	// Act
-	sut.Create(headers, contents, consts.Arial, props.TableList{
+	sut.Create(, headers, contents, consts.Arial, props.TableList{
 		Line: true,
 		LineProp: props.Line{
 			Style: consts.Dashed,

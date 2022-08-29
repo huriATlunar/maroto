@@ -2,6 +2,7 @@ package pdf_test
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"testing"
 
@@ -12,7 +13,6 @@ import (
 	"github.com/huriATlunar/maroto/pkg/consts"
 	"github.com/huriATlunar/maroto/pkg/pdf"
 	"github.com/huriATlunar/maroto/pkg/props"
-	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

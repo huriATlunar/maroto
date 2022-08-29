@@ -18,3 +18,8 @@ type Line struct {
 func (_m *Line) Draw(cell internal.Cell, lineProp props.Line) {
 	_m.Called(cell, lineProp)
 }
+
+func (_m *Line)	DrawCellLines(cell internal.Cell, borders string, lineProp props.Line) {
+    _m.Called( cell, borders, lineProp )
+}
+    

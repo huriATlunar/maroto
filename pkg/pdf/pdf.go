@@ -276,7 +276,7 @@ func (s *PdfMaroto) Signature(label string, prop ...props.Font) {
 // Headers have bold style, and localized at the top of table.
 // Contents are array of arrays. Each array is one line.
 func (s *PdfMaroto) TableList(header []string, contents [][]string, prop ...props.TableList) {
-	s.TableListHelper.Create(s.GetFpdf(), header, contents, s.defaultFontFamily, prop...)
+	s.TableListHelper.Create(header, contents, s.defaultFontFamily, prop...)
 }
 
 // SetBorder enable the draw of lines in every cell.

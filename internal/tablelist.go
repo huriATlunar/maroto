@@ -31,21 +31,20 @@ type MarotoGridPart interface {
 	Text(text string, prop ...props.Text)
 }
 
-// TableList is the abstraction to create a table with header and contents. //  gofpdf.Fpdf
+// TableList is the abstraction to create a table with header and contents.
 type TableList interface {
-	Create(fpdf fpdf.Fpdf, header []string, contents [][]string, defaultFontFamily string, prop ...props.TableList)
+	Create(header []string, contents [][]string, defaultFontFamily string, prop ...props.TableList)
 	BindGrid(part MarotoGridPart)
 }
 
 type tableList struct {
-	//fpdf gofpdf.Fpdf
 	fpdf fpdf.Fpdf
 	pdf  MarotoGridPart
 	text Text
 	font Font
 }
 
-// NewTableList create a TableList. // saved for later: gofpdf.Fpdf
+// NewTableList create a TableList.
 func NewTableList(fPdf fpdf.Fpdf, text Text, font Font) *tableList {
 	return &tableList{
 		fpdf: fPdf,
@@ -61,7 +60,7 @@ func (s *tableList) BindGrid(pdf MarotoGridPart) {
 
 // Create method creates a header section with a list of strings and
 // create many rows with contents.
-func (s *tableList) Create(Fpdf fpdf.Fpdf, header []string, contents [][]string, defaultFontFamily string, prop ...props.TableList) {
+func (s *tableList) Create(header []string, contents [][]string, defaultFontFamily string, prop ...props.TableList) {
 	if len(header) == 0 {
 		return
 	}
