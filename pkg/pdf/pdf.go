@@ -36,6 +36,7 @@ type Maroto interface {
 	Line(spaceHeight float64, prop ...props.Line)
 
 	// Inside Col/Row Components
+	DrawCellLines(borders string, lineProp props.Line)
 	Text(text string, prop ...props.Text)
 	FileImage(filePathName string, prop ...props.Rect) (err error)
 	Base64Image(base64 string, extension consts.Extension, prop ...props.Rect) (err error)
@@ -427,6 +428,17 @@ func (s *PdfMaroto) Col(width uint, closure func()) {
 // ColSpace create an empty column inside a row.
 func (s *PdfMaroto) ColSpace(gridSize uint) {
 	s.Col(gridSize, func() {})
+}
+
+func (s *PdfMaroto) DrawCellLines(borders string, lineProp props.Line) {
+
+	cell := internal.Cell{
+		X:      s.xColOffset,
+		Y:      s.offsetY,
+		Width:  s.colWidth,
+		Height: s.rowHeight,
+	}
+	s.LineHelper.DrawCellLines(cell, borders, lineProp)
 }
 
 // Text create a text inside a cell.
