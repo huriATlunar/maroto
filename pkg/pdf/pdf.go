@@ -36,7 +36,6 @@ type Maroto interface {
 	Line(spaceHeight float64, prop ...props.Line)
 
 	// Inside Col/Row Components
-	DrawCellLines(borders string, lineProp props.Line)
 	Text(text string, prop ...props.Text)
 	FileImage(filePathName string, prop ...props.Rect) (err error)
 	Base64Image(base64 string, extension consts.Extension, prop ...props.Rect) (err error)
@@ -52,10 +51,12 @@ type Maroto interface {
 	// Helpers
 	AddPage()
 	SetBorder(on bool)
+	SetBorderDefinition(borders string)
 	SetBackgroundColor(color color.Color)
 	SetAliasNbPages(alias string)
 	SetFirstPageNb(number int)
 	GetBorder() bool
+	GetBorderDefinition() string
 	GetPageSize() (width float64, height float64)
 	GetCurrentPage() int
 	GetCurrentOffset() float64
@@ -104,6 +105,7 @@ type PdfMaroto struct {
 	calculationMode   bool
 	backgroundColor   color.Color
 	debugMode         bool
+	borderDefinition  string
 	orientation       consts.Orientation
 	pageSize          consts.PageSize
 	defaultFontFamily string
@@ -191,7 +193,7 @@ func (s *PdfMaroto) AddPage() {
 	maxOffsetPage := int(pageHeight - bottom - top)
 
 	s.Row(float64(maxOffsetPage-totalOffsetY), func() {
-		s.ColSpace(uint(consts.MaxGridSum))
+		s.ColSpace(uint(props.MaxGridSum))
 	})
 }
 
@@ -286,6 +288,10 @@ func (s *PdfMaroto) SetBorder(on bool) {
 	s.debugMode = on
 }
 
+func (s *PdfMaroto) SetBorderDefinition(borderDefinition string) {
+	s.borderDefinition = borderDefinition
+}
+
 // SetBackgroundColor define the background color of the PDF.
 // This method can be used to toggle background from rows.
 func (s *PdfMaroto) SetBackgroundColor(color color.Color) {
@@ -314,6 +320,10 @@ func (s *PdfMaroto) SetCompression(compress bool) {
 // GetBorder return the actual border value.
 func (s *PdfMaroto) GetBorder() bool {
 	return s.debugMode
+}
+
+func (s *PdfMaroto) GetBorderDefinition() string {
+	return s.borderDefinition
 }
 
 // GetPageSize return the actual page size.
@@ -407,10 +417,10 @@ func (s *PdfMaroto) Row(height float64, closure func()) {
 // columns or rows inside columns.
 func (s *PdfMaroto) Col(width uint, closure func()) {
 	if width == 0 {
-		width = uint(consts.MaxGridSum)
+		width = uint(props.MaxGridSum)
 	}
 
-	percent := float64(width) / consts.MaxGridSum
+	percent := float64(width) / props.MaxGridSum
 
 	pageWidth, _ := s.Pdf.GetPageSize()
 	left, _, right, _ := s.Pdf.GetMargins()
@@ -428,17 +438,6 @@ func (s *PdfMaroto) Col(width uint, closure func()) {
 // ColSpace create an empty column inside a row.
 func (s *PdfMaroto) ColSpace(gridSize uint) {
 	s.Col(gridSize, func() {})
-}
-
-func (s *PdfMaroto) DrawCellLines(borders string, lineProp props.Line) {
-
-	cell := internal.Cell{
-		X:      s.xColOffset,
-		Y:      s.offsetY,
-		Width:  s.colWidth,
-		Height: s.rowHeight,
-	}
-	s.LineHelper.DrawCellLines(cell, borders, lineProp)
 }
 
 // Text create a text inside a cell.
@@ -616,6 +615,8 @@ func (s *PdfMaroto) createColSpace(actualWidthPerCol float64) {
 
 	if s.debugMode {
 		border = "1"
+	} else {
+		border = s.borderDefinition
 	}
 
 	s.Pdf.CellFormat(actualWidthPerCol, s.rowHeight, "", border, 0, "C", !s.backgroundColor.IsWhite(), 0, "")
@@ -652,7 +653,7 @@ func (s *PdfMaroto) footer() {
 	maxOffsetPage := int(pageHeight - bottom - top)
 
 	s.Row(float64(maxOffsetPage-totalOffsetY), func() {
-		s.ColSpace(uint(consts.MaxGridSum))
+		s.ColSpace(uint(props.MaxGridSum))
 	})
 
 	if s.footerClosure != nil {
@@ -667,7 +668,7 @@ func (s *PdfMaroto) header() {
 	s.SetBackgroundColor(color.NewWhite())
 
 	s.Row(s.marginTop, func() {
-		s.ColSpace(uint(consts.MaxGridSum))
+		s.ColSpace(uint(props.MaxGridSum))
 	})
 
 	if s.headerClosure != nil {

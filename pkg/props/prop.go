@@ -5,6 +5,8 @@ import (
 	"github.com/huriATlunar/maroto/pkg/consts"
 )
 
+var MaxGridSum float64 = consts.MaxGridSum
+
 // Proportion represents a proportion from a rectangle, example: 16x9, 4x3...
 type Proportion struct {
 	// Width from the rectangle: Barcode, image and etc.
@@ -60,7 +62,8 @@ type Text struct {
 	// text reach the right cell boundary.
 	Extrapolate bool
 	// VerticalPadding define an additional space between lines.
-	VerticalPadding float64
+	VerticalPadding  float64
+	HorizontaPadding float64
 	// Color define the font color.
 	Color color.Color
 }
@@ -101,9 +104,7 @@ type TableListContent struct {
 	// the sum of the values cannot be greater than 12, if this
 	// value is not provided the width of all columns will be the
 	// same.
-	GridSizes    []uint
-	OuterBorder  bool
-	InnerBorders bool
+	GridSizes []uint
 }
 
 // TableList represents properties from a TableList.
@@ -224,6 +225,10 @@ func (s *Text) MakeValid(defaultFamily string) {
 
 	if s.VerticalPadding < 0 {
 		s.VerticalPadding = 0
+	}
+
+	if s.HorizontaPadding < 0 {
+		s.HorizontaPadding = 0
 	}
 }
 

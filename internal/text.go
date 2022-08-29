@@ -113,7 +113,7 @@ func (s *text) addLine(textProp props.Text, xColOffset, colWidth, yColOffset, te
 	left, top, _, _ := s.pdf.GetMargins()
 
 	if textProp.Align == consts.Left {
-		s.pdf.Text(xColOffset+left, yColOffset+top, text)
+		s.pdf.Text(xColOffset+left+textProp.HorizontaPadding, yColOffset+top, text)
 		return
 	}
 
@@ -125,7 +125,7 @@ func (s *text) addLine(textProp props.Text, xColOffset, colWidth, yColOffset, te
 
 	dx := (colWidth - textWidth) / modifier
 
-	s.pdf.Text(dx+xColOffset+left, yColOffset+top, text)
+	s.pdf.Text(dx+xColOffset+left-textProp.HorizontaPadding, yColOffset+top, text)
 }
 
 func (s *text) textToUnicode(txt string, props props.Text) string {
