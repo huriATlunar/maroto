@@ -699,6 +699,53 @@ func ExamplePdfMaroto_SetFontLocation() {
 	// Do more things and save...
 }
 
+// ExamplePdfMaroto_BorderDefinitions how to to draw borders around Row and Col boxes.
+func TestPdfMaroto_DrawCellLines(t *testing.T) {
+	m := pdf.NewMaroto(consts.Portrait, consts.A4)
+
+	m.SetBorder(true)
+	m.Row(8, func() {
+		m.ColSpace(1)
+
+		m.Col(10, func() {
+			m.Text("  Using .mSetBorders(true)")
+		})
+		m.ColSpace(1)
+	})
+	m.SetBorder(false)
+
+	m.Row(20, func() { m.ColSpace(12) })
+
+	m.Row(8, func() {
+		m.ColSpace(1)
+		saveBorderDef := m.GetBorderDefinition()
+		m.SetBorderDefinition("LR")
+		m.Col(10, func() {
+			m.Text("Left og Right border, Top space = 2.0, HorizontalPadding: 2.0", props.Text{Top: 2.0, HorizontalPadding: 2.0})
+		})
+		m.SetBorderDefinition(saveBorderDef)
+		m.ColSpace(1)
+	})
+
+	m.Row(20, func() { m.ColSpace(12) })
+	/*
+		m.Row(8, func() {
+			m.Col(1, func() {
+				m.DrawCellLines("R", props.Line{Width: 0.2, Color: color.Color{Red: 0, Green: 255, Blue: 0}})
+			})
+			m.Col(10, func() {
+				m.Text("Where is my SECOND line?")
+				m.DrawCellLines("TB", props.Line{Width: 0.2, Color: color.Color{Red: 0, Green: 0, Blue: 255}})
+			})
+			m.Col(1, func() {
+				m.DrawCellLines("L", props.Line{Width: 0.2, Color: color.Color{Red: 255, Green: 0, Blue: 0}})
+			})
+		})
+	*/
+	// Do more things and save...
+	_ = m.OutputFileAndClose("Test-BorderDefinitions.pdf")
+}
+
 // ExamplePdfMaroto_AddUTF8Font demonstrates how to define a custom font to your pdf.
 func TestPdfMaroto_SetDefaultFontFamily(t *testing.T) {
 	m := pdf.NewMaroto(consts.Portrait, consts.A4)

@@ -62,8 +62,8 @@ type Text struct {
 	// text reach the right cell boundary.
 	Extrapolate bool
 	// VerticalPadding define an additional space between lines.
-	VerticalPadding  float64
-	HorizontaPadding float64
+	VerticalPadding   float64
+	HorizontalPadding float64
 	// Color define the font color.
 	Color color.Color
 }
@@ -227,8 +227,8 @@ func (s *Text) MakeValid(defaultFamily string) {
 		s.VerticalPadding = 0
 	}
 
-	if s.HorizontaPadding < 0 {
-		s.HorizontaPadding = 0
+	if s.HorizontalPadding < 0 {
+		s.HorizontalPadding = 0
 	}
 }
 
