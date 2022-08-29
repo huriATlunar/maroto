@@ -4,9 +4,8 @@
 [![Travis](https://travis-ci.com/huriATlunar/maroto.svg?branch=master)][travis] 
 [![Codecov](https://img.shields.io/codecov/c/github/huriATlunar/maroto)](https://codecov.io/gh/huriATlunar/maroto) 
 [![Go Report Card](https://goreportcard.com/badge/github.com/huriATlunar/maroto)](https://goreportcard.com/report/github.com/huriATlunar/maroto)
-[![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go#template-engines)  
 
-A Maroto way to create PDFs. Maroto is inspired in Bootstrap and uses [Gofpdf](https://github.com/jung-kurt/gofpdf). Fast and simple.
+A Maroto way to create PDFs. Maroto is inspired in Bootstrap and uses [Gofpdf](https://github.com/jung-kurt/gofpdf). Fast and simple. This fork of Maroto adds a way to draw vertical and horizontal lines around Rows and Cols. It adds a SetBorderDefinitions(string) and GetBorderDefinitions() string to the Maroto interface. The BorderDifinitions gets pass down to gofpdf's CellFormat method.
 
 > Maroto definition: Brazilian expression, means an astute/clever/intelligent person.
 
